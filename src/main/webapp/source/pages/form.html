@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>拍加乐</title>
+
+</head>
+<body>
+	<h1>----------------主表-----------------------</h1>
+	<form  method="post" id="mainForm">
+			用户名：<input type="text" name="username" usemap="{byteRangeLength:[1,30,3],required:true}"/><br>
+			密码：<input type="text" name="password" /><br>
+			<a id="submit" style="color:red">submit</a>
+	</form>
+	<h1>------------------从表-----------------------</h1>
+	<form method="post" id="subForm">
+			从表记录1:<input type="text" name="details"><br>
+		    从表记录2<input type="text" name="details"><br>
+	</form>
+	
+	<h1>--------------------删除------------------------</h1>
+	-从表-id:<input id="details_id"  >
+	<a id ="delete_id" style="color:blue">删除</a>
+	<h1>--------------------修改------------------------</h1>
+     <form id="update">
+     id:<input name ="id">
+     name:<input name ="username">
+	 <a id ="update_id" style="color:pink">修改</a>
+     </form>
+	<script type="text/javascript" src="../../source/mvc/lib/cui.js"></script>
+	<script type="text/javascript" src="../../source/mvc/config/config.js"></script>
+	<script type="text/javascript">
+
+	CUI.use(['ajaxform','layer','utils'], function($ajax,$layer,$utils) {
+		return {
+			initialize:function(){
+				var _this = this;
+				$("#submit").click(function(){
+					_this.submit($('#mainForm').buildFormData(),$('#subForm').buildFormData());
+				});
+				$("#delete_id").click(function(){
+					console.log($('#details_id').val());
+					_this.deletes($('#details_id').val());
+				});
+				$("#update_id").click(function(){
+					_this.update($('#update').buildFormData());
+				});
+			},
+			submit : function(mainJson,subJson) {
+				$.ajax({
+					url : '../../../member/formProcessing',
+					type : "post",
+					data : $.extend({},{
+							"mainFrom":JSON.stringify(
+									[{
+										"jdbcTemplateName":"mysqlTemplate",
+										"pFile":"insert",
+										"pKey":"insert_main",
+										"main":true,
+										"onlyKey":true,
+										"from":JSON.stringify({
+											"jdbcTemplateName":"mysqlTemplate",
+											"pFile":"insert",
+											"pKey":"insert_details",
+											"fields":["details"]
+										})
+									}])
+					},mainJson,subJson,true),
+					dataType : 'json',
+					async :true,
+					success : function(result) {
+						if (result.status === 'success') {
+							//下面写你的任何业务
+						     alert('success!!!');
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {}
+				});
+			},
+			deletes:function(id){
+				$.ajax({
+					url : '../../member/formProcessing',
+					type : "post",
+					data : {
+						    "jdbcTemplateName":"mysqlTemplate",
+							"pFile":"insert",
+							"pKey":"delete_detail",
+							"id":id
+					},
+					dataType : 'json',
+					async :true,
+					success : function(result) {
+						if (result.status === 'success') {
+ 							console.log(result.status);
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {}
+				});
+			},
+			update:function(data){
+				$.ajax({
+					url : '../../member/formProcessing',
+					type : "post",
+					data : $.extend({},{
+						  "jdbcTemplateName":"mysqlTemplate",
+							"pFile":"insert",
+							"pKey":"update_main",
+					},data,true),
+					dataType : 'json',
+					async :true,
+					success : function(result) {
+						if (result.status === 'success') {
+ 							console.log(result.status);
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {}
+				});
+			}
+		}
+	});
+	
+	</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>上下载数据</title>
+</head>
+<body>
+	<form id="formId" enctype="multipart/form-data">
+		<input type="file" name="detail" multiple="multiple">
+		<a id="submit">上传文件</a>
+	</form>
+	<br>
+	<a id="download">下载文件</a>
+</body>
+
+<script type="text/javascript" src="../../source/mvc/lib/cui.js"></script>
+<script type="text/javascript" src="../../source/mvc/config/config.js"></script>
+<script type="text/javascript">
+	CUI
+			.use(
+					[ 'ajaxform', 'layer', 'utils' ],
+					function($ajax, $layer, $utils) {
+						return {
+							initialize : function() {
+								console.log("success!");
+								_this = this;
+								$("#download").click(function() {
+									console.log("download");
+									_this.download();
+								});
+								_this.uploadFile();
+							},
+							download : function() {
+								/* 	$.ajax({
+										url : '../../updownload/download',
+										type : "post",
+										data :{"storeName":"d91de541e23b4dc1b900c0c57683aeb6.sql",
+											"downloadName":"d91de541e23b4dc1b900c0c57683aeb6.sql"},
+										dataType : 'json',
+										async :true,
+										success : function(result) {
+											if (result.status === 'success') {
+											     alert('success!!!');
+											}
+										},
+										error : function(XMLHttpRequest, textStatus, errorThrown) {}
+									}); */
+								window.location.href = "../../updownload/download?storeName=d91de541e23b4dc1b900c0c57683aeb6.sql&downloadName=d91de541e23b4dc1b900c0c57683aeb6.sql";
+							},
+							uploadFile : function() {
+								new CuiAjaxForm($('#formId'), {
+									submitSelector : $('#submit'),
+									action : '../../updownload/upload',
+									beforeEvent : function(formData, jqForm,
+											options) {
+										$.insertDynamicDataForTheForm(formData,
+												jqForm, options,
+												'jdbcTemplateName',
+												'mysqlTemplate');
+										$.insertDynamicDataForTheForm(formData,
+												jqForm, options, 'pFile',
+												'file');
+										$.insertDynamicDataForTheForm(formData,
+												jqForm, options, 'pKey',
+												'addFile');
+										return true;
+									},
+									callbackEvent : function(result) {
+										if (result.status == 'success') {
+											alert('success!!!');
+										}
+									}
+								});
+							}
+						}
+					})
+</script>
+</html>
