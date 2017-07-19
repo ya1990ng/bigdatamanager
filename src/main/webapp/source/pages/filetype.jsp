@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>文档类别管理</title>
+<title>要素类别</title>
 
 <script type="text/javascript" src="../../source/mvc/lib/cui.js"></script>
 <script type="text/javascript" src="../../source/mvc/config/config.js"></script>
@@ -120,13 +120,13 @@ String time = sdf.format(new Date());
 												操作日志</span></a></li>
 								</ul></li>
 							<li class="nav-parent"><a href="javascript:void(0);"> <i
-									class="fa fa-tasks" aria-hidden="true"></i><span> 文档管理</span>
+									class="fa fa-tasks" aria-hidden="true"></i><span> 要素管理</span>
 							</a>
 								<ul class="nav nav-children">
 									<li><a href="../pages/filetarget_list.jsp"><span class="text">
-												文档类别管理</span></a></li>
+												要素类别管理</span></a></li>
 									<li><a href="../pages/file_list.jsp"><span class="text">
-												文档管理</span></a></li>
+												要素管理</span></a></li>
 								</ul></li>
 								
 							<li class="nav-parent"><a href="javascript:void(0);"> <i
@@ -155,26 +155,26 @@ String time = sdf.format(new Date());
 			<!-- 查询模块 -->
 			<form id="searchFrom">
 				<div class="input-group">
-					<label for="menu_name">类别名称：</label>
-					<input id="targetName" name="targetName" usemap="{'logic':'and','compare':'like'}" placeholder="请输入类别名称" /> 
+					<label for="menu_name">要素名称：</label>
+					<input id="typeName" name="typeName" usemap="{'logic':'and','compare':'like'}" placeholder="请输入要素名称" /> 
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-zdy search" id="search">查询</button>
 					</span>
 				</div>
 			</form>
 			<div>
-				<!-- 添加文档类别按钮 -->
+				<!-- 添加要素类别按钮 -->
 				<p class="send">
-					<button class="btn btn-zdy" data-toggle="modal" data-target="#addcontent">添加文档类别</button>
+					<button class="btn btn-zdy" data-toggle="modal" data-target="#addcontent">添加要素类别</button>
 				</p>
 
-				<!-- 文档类别列表 -->	
+				<!-- 要素类别列表 -->	
 				<table class="table-striped table-bordered table-hover">
 					<thead>
 						<tr>
 							<th>序号</th>
-							<th>类别名称</th>
-							<th>所属父类</th>
+							<th>要素名称</th>
+							<th>要素级别</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -193,24 +193,54 @@ String time = sdf.format(new Date());
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="ModalLabel">添加文档类别</h4>
+						<h4 class="modal-title" id="ModalLabel">添加要素类别</h4>
 					</div>
 
 					<form id="formId" enctype="multipart/form-data" class="form-horizontal">
 						<div class="modal-body">
 							<div class="form-group">
-								<label for="contentname" class="col-sm-3 control-label">所属父类：</label>
+								<label for="contentname" class="col-sm-3 control-label">一级指标：</label>
 								<div class="col-sm-4">
-									<select id="targetList" name="targetList"
+									<select id="type1" name="type1" onchange="clickOpt();"
 										style="height: 33px; width: 100%; border-color: #e3e6f3;">
 										<option value="0">请选择</option>
 									</select>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="mname1" class="col-sm-3 control-label">类别名称：</label>
+								<label for="contentname" class="col-sm-3 control-label">二级指标：</label>
+								<div class="col-sm-4">
+									<select id="type2" name="type2" onchange="clickOpt2();"
+										style="height: 33px; width: 100%; border-color: #e3e6f3;">
+										<option value="0">请选择</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="contentname" class="col-sm-3 control-label">三级指标：</label>
+								<div class="col-sm-4">
+									<select id="type3" name="type3" onchange="clickOpt3();"
+										style="height: 33px; width: 100%; border-color: #e3e6f3;">
+										<option value="0">请选择</option>
+									</select>
+								</div>
+							</div>
+							<!-- <div class="form-group">
+								<label for="contentname" class="col-sm-3 control-label">四级指标：</label>
+								<div class="col-sm-4">
+									<select id="type4" name="type4"
+										style="height: 33px; width: 100%; border-color: #e3e6f3;">
+										<option value="0">请选择</option>
+									</select>
+								</div>
+							</div> -->
+							
+							<input type="hidden" id="parentId" name="parentId" value="0"/>
+							<input type="hidden" id="typeLevel" name="typeLevel" value="1"/>
+							<div class="form-group">
+								<label for="mname1" class="col-sm-3 control-label">指标名称：</label>
 								<div class="col-sm-6">
-									<input type="text" class="form-control" id="target" name="target" />
+									<input type="text" class="form-control" id="typeName" name="typeName" />
 								</div>
 							</div>
 						</div>
@@ -236,21 +266,52 @@ String time = sdf.format(new Date());
 				</div>
 				<div class="modal-body">
 					<form class="form-horizontal" id="editUI" method="post">
-
-						<input type="hidden" value="" id="ee_id" name="ee_id" />
-						<div class="form-group">
-							<label for="contentname" class="col-sm-3 control-label">所属父类：</label>
-							<div class="col-sm-4">
-								<select id="ee_targetList" name="ee_targetList"
-									style="height: 33px; width: 100%; border-color: #e3e6f3;">
-									<option value="0">请选择</option>
-								</select>
+						<input type="hidden" value="" id="2_id" name="2_id" />
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="contentname" class="col-sm-3 control-label">一级指标：</label>
+								<div class="col-sm-4">
+									<select id="2_type1" name="2_type1" onchange="clickOpt_2();"
+										style="height: 33px; width: 100%; border-color: #e3e6f3;">
+										<option value="0">请选择</option>
+									</select>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label for="mname1" class="col-sm-3 control-label">类别名称：</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" id="ee_target" name="ee_target" />
+							<div class="form-group">
+								<label for="contentname" class="col-sm-3 control-label">二级指标：</label>
+								<div class="col-sm-4">
+									<select id="2_type2" name="2_type2" onchange="clickOpt2_2();"
+										style="height: 33px; width: 100%; border-color: #e3e6f3;">
+										<option value="0">请选择</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="contentname" class="col-sm-3 control-label">三级指标：</label>
+								<div class="col-sm-4">
+									<select id="2_type3" name="2_type3" onchange="clickOpt3_2();"
+										style="height: 33px; width: 100%; border-color: #e3e6f3;">
+										<option value="0">请选择</option>
+									</select>
+								</div>
+							</div>
+							<!-- <div class="form-group">
+								<label for="contentname" class="col-sm-3 control-label">四级指标：</label>
+								<div class="col-sm-4">
+									<select id="type4" name="type4"
+										style="height: 33px; width: 100%; border-color: #e3e6f3;">
+										<option value="0">请选择</option>
+									</select>
+								</div>
+							</div> -->
+							
+							<input type="hidden" id="2_parentId" name="2_parentId" value="0"/>
+							<input type="hidden" id="2_typeLevel" name="2_typeLevel" value="1"/>
+							<div class="form-group">
+								<label for="mname1" class="col-sm-3 control-label">指标名称：</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="2_typeName" name="2_typeName" />
+								</div>
 							</div>
 						</div>
 						<div class="modal-footer ">
@@ -329,7 +390,7 @@ function pageSearch(pageNo) {
 		data : $.extend({}, {
 			"jdbcTemplateName" : "mysqlTemplate",
 			"pFile" : "file",
-			"pKey" : "selectFileTargetList",
+			"pKey" : "selectFileTypeList",
 			"type" : "mysql",
 			"pageNo" : pageNo,
 			"pageSize" : pageSize,
@@ -345,16 +406,13 @@ function pageSearch(pageNo) {
 				$(pageSource.list).each(
 					function(index, element) {
 						var ind = parseInt(index) + 1;
-						var parentname = element.parentname;
-						if (parentname == null)
-							parentname = "";
 						$("#mytable").append(
 						"<tr><td>"
 						+ ind
 						+ "</td><td>"
-						+ element.targetname
+						+ element.typename
 						+ "</td><td>"
-						+ parentname
+						+ element.typelevel
 						+ "</td><td>"
 						+ "<a href=\"javascript:void(0)\" data-toggle=\"modal\" data-target=\"#ee\" onclick=\"edit("
 						+ "'"
@@ -378,6 +436,8 @@ function pageSearch(pageNo) {
 		},
 	});
 }
+
+var selectSource;
 // 父类list
 function listSearch() {
 	$.asyncRequest({
@@ -385,27 +445,153 @@ function listSearch() {
 		data : $.extend({}, {
 			"jdbcTemplateName" : "mysqlTemplate",
 			"pFile" : "file",
-			"pKey" : "filelistParentTarget",
+			"pKey" : "selectFileTypeList",
 		}, $('#searchFrom').buildQueryInfo(), true),
 		event : function(result) {
 			if (result.status === 'success') {
 				//后台返回的结果集，格式:
 				var pageSource = result.listInfo;
+				selectSource = pageSource;
 				//下面写你的任何业务
 				//alert(JSON.stringify(pageSource));
-				$("#targetList").html("");// 清空
-				$("#ee_targetList").html("");// 清空
-				var targetHtml = "";
-				targetHtml += "<option value='0'>请选择</option>";
+				var type1Html = "<option value='0'>请选择</option>";
+				var type2Html = "<option value='0'>请选择</option>";
+				var type3Html = "<option value='0'>请选择</option>";
+				var type4Html = "<option value='0'>请选择</option>";
 				for (var i = 0; i < pageSource.length; i++) {
-					targetHtml += "<option value='"+pageSource[i].id+"'>"
-							+ pageSource[i].targetname + "</option>"
+					if(pageSource[i].typelevel == '1') {
+						type1Html += "<option value='"+pageSource[i].id+"'>" + pageSource[i].typename + "</option>";
+					} else if(pageSource[i].typelevel == '2') {
+						type2Html += "<option value='"+pageSource[i].id+"'>" + pageSource[i].typename + "</option>";
+					} else if(pageSource[i].typelevel == '3') {
+						type3Html += "<option value='"+pageSource[i].id+"'>" + pageSource[i].typename + "</option>";
+					} else if(pageSource[i].typelevel == '4') {
+						type4Html += "<option value='"+pageSource[i].id+"'>" + pageSource[i].typename + "</option>";
+					}
 				}
-				$("#targetList").html(targetHtml);
-				$("#ee_targetList").html(targetHtml);
+				$("#type1").html(type1Html);
+				$("#2_type1").html(type1Html);
+				//$("#type2").html(type2Html);
+				//$("#type3").html(type3Html);
+				//$("#type4").html(type4Html);
 			}
 		},
 	});
+}
+
+
+//select 联动1
+function clickOpt(){  
+    var value = $("#type1").val();
+    if(value != '0') {
+    	var pageSource = selectSource;
+    	var typeHtml = "<option value='0'>请选择</option>";
+    	for (var i = 0; i < pageSource.length; i++) {
+    		if(pageSource[i].typelevel == '2' && pageSource[i].parentid == value) {
+    			typeHtml += "<option value='"+pageSource[i].id+"'>" + pageSource[i].typename + "</option>";
+    		}
+    	}
+    	$("#type2").html(typeHtml);
+    	$("#type3").html("");
+    	$("#parentId").val(value);
+    	$("#typeLevel").val(2);
+    } else {
+    	$("#type2").html("");
+    	$("#type3").html("");
+    	$("#parentId").val(0);
+    	$("#typeLevel").val(1);
+    }
+     
+	
+	
+}
+//select 联动2
+function clickOpt2(){  
+    var value = $("#type2").val();
+    if(value != '0') {
+	    var pageSource = selectSource;
+		var typeHtml = "<option value='0'>请选择</option>";
+		for (var i = 0; i < pageSource.length; i++) {
+			if(pageSource[i].typelevel == '3' && pageSource[i].parentid == value) {
+				typeHtml += "<option value='"+pageSource[i].id+"'>" + pageSource[i].typename + "</option>";
+			}
+		}
+		$("#type3").html(typeHtml);
+		$("#parentId").val(value);
+    	$("#typeLevel").val(3);
+    } else {
+    	$("#type3").html("");
+    	$("#parentId").val($("#type1").val());
+    	$("#typeLevel").val(2);
+    }
+}
+//select 联动3
+function clickOpt3(){  
+    var value = $("#type3").val();
+    if(value != '0') {
+		$("#parentId").val(value);
+    	$("#typeLevel").val(4);
+    } else {
+    	$("#parentId").val($("#type2").val());
+    	$("#typeLevel").val(3);
+    }
+}
+
+//select_2 联动1
+function clickOpt_2(){  
+    var value = $("#2_type1").val();
+    if(value != '0') {
+    	var pageSource = selectSource;
+    	var typeHtml = "<option value='0'>请选择</option>";
+    	for (var i = 0; i < pageSource.length; i++) {
+    		if(pageSource[i].typelevel == '2' && pageSource[i].parentid == value) {
+    			typeHtml += "<option value='"+pageSource[i].id+"'>" + pageSource[i].typename + "</option>";
+    		}
+    	}
+    	$("#2_type2").html(typeHtml);
+    	$("#2_type3").html("");
+    	$("#2_parentId").val(value);
+    	$("#2_typeLevel").val(2);
+    } else {
+    	$("#2_type2").html("");
+    	$("#2_type3").html("");
+    	$("#2_parentId").val(0);
+    	$("#2_typeLevel").val(1);
+    }
+     
+	
+	
+}
+//select_2 联动2
+function clickOpt2_2(){  
+    var value = $("#2_type2").val();
+    if(value != '0') {
+	    var pageSource = selectSource;
+		var typeHtml = "<option value='0'>请选择</option>";
+		for (var i = 0; i < pageSource.length; i++) {
+			if(pageSource[i].typelevel == '3' && pageSource[i].parentid == value) {
+				typeHtml += "<option value='"+pageSource[i].id+"'>" + pageSource[i].typename + "</option>";
+			}
+		}
+		$("#2_type3").html(typeHtml);
+		$("#2_parentId").val(value);
+    	$("#2_typeLevel").val(3);
+    } else {
+    	$("#2_type3").html("");
+    	$("#2_parentId").val($("#2_type1").val());
+    	$("#2_typeLevel").val(2);
+    }
+}
+//select_2 联动3
+function clickOpt3_2(){  
+    var value = $("#2_type3").val();
+    if(value != '0') {
+		$("#2_parentId").val(value);
+    	$("#2_typeLevel").val(4);
+    } else {
+    	$("#2_parentId").val($("#2_type2").val());
+    	$("#2_typeLevel").val(3);
+    }
 }
 
 function deletefile(id) {
@@ -415,7 +601,7 @@ function deletefile(id) {
 			data : {
 				"jdbcTemplateName" : "mysqlTemplate",
 				"pFile" : "file",
-				"pKey" : "deleteFileTarget",
+				"pKey" : "deleteFileType",
 				"id" : id
 			},
 			dataType : "json",
@@ -440,7 +626,7 @@ function edit(id) {
 		data : {
 			"jdbcTemplateName" : "mysqlTemplate",
 			"pFile" : "file",
-			"pKey" : "selectFileTargetInfo",
+			"pKey" : "selectFileTypeInfo",
 			"type" : "mysql",
 			"id" : id
 		},
@@ -450,9 +636,54 @@ function edit(id) {
 			if (result.status === 'success') {
 				var listInfo = result.listInfo;
 
-				$("#ee_id").val(listInfo[0].id);// 赋值
-				$("#ee_targetList").val(listInfo[0].parentid);// 赋值
-				$("#ee_target").val(listInfo[0].targetname);// 赋值
+				var parentid = listInfo[0].parentid;
+				var typelevel = listInfo[0].typelevel;
+				$("#2_id").val(listInfo[0].id);// 赋值
+				$("#2_parentId").val(parentid);// 赋值
+				$("#2_typeLevel").val(typelevel);// 赋值
+				$("#2_typeName").val(listInfo[0].typename);// 赋值
+				
+				var pageSource = selectSource;
+				if(typelevel == '1') {
+					
+				} else if(typelevel == '2') {
+					$("#2_type1").val(parentid);
+					clickOpt_2();
+				} else if(typelevel == '3') {
+					var value1;
+					for (var i = 0; i < pageSource.length; i++) {
+			    		if(pageSource[i].typelevel == '2' && pageSource[i].id == parentid) {
+			    			value1 = pageSource[i].parentid;
+			    			break;
+			    		}
+			    	}
+					$("#2_type1").val(value1);
+					clickOpt_2();
+					$("#2_type2").val(parentid);
+					clickOpt2_2();
+				} else if(typelevel == '4') {
+					var value1;
+					for (var i = 0; i < pageSource.length; i++) {
+			    		if(pageSource[i].typelevel == '3' && pageSource[i].id == parentid) {
+			    			value1 = pageSource[i].parentid;
+			    			break;
+			    		}
+			    	}
+					var value2;
+					for (var i = 0; i < pageSource.length; i++) {
+			    		if(pageSource[i].typelevel == '2' && pageSource[i].id == value1) {
+			    			value2 = pageSource[i].parentid;
+			    			break;
+			    		}
+			    	}
+					$("#2_type1").val(value2);
+					clickOpt_2();
+					$("#2_type2").val(value1);
+					clickOpt2_2();
+					$("#2_type3").val(parentid);
+					clickOpt2_3();
+				}
+				
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {

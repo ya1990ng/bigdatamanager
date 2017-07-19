@@ -127,6 +127,16 @@ String time = sdf.format(new Date());
 									<li><a href="../pages/file_list.jsp"><span class="text">
 												文档管理</span></a></li>
 								</ul></li>
+								
+							<li class="nav-parent"><a href="javascript:void(0);"> <i
+									class="fa fa-tasks" aria-hidden="true"></i><span> 要素管理</span>
+							</a>
+								<ul class="nav nav-children">
+									<li><a href="../pages/filetype.jsp"><span class="text">
+												要素类别</span></a></li>
+									<li><a href="javascript:void(0);"><span class="text">
+												要素提取</span></a></li>
+								</ul></li>
 						</ul>
 						</nav>
 					</div>
