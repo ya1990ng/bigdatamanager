@@ -22,6 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+/**
+ * 文档类别管理Controller
+ * @author ThinkPad
+ *
+ */
 @RequestMapping(value="target")
 @Controller
 public class TargetController extends BaseMethodController{

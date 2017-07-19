@@ -22,6 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+/**
+ * 文档管理Controller
+ * @author ThinkPad
+ *
+ */
 @RequestMapping(value="updownload")
 @Controller
 public class UpdownloadController extends BaseMethodController{
